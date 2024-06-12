@@ -39,7 +39,7 @@ metadata:
     name: databases
 EOF
 
-# MySQL
+# Install MySQL
 if [ "$MYSQL" == "true" ]; then
 cat <<EOF | kubectl apply --namespace databases -f -
 apiVersion: v1
@@ -80,7 +80,7 @@ spec:
 EOF
 fi
 
-# Redis
+# Install Redis
 if [ "$REDIS" == "true" ]; then
 cat <<EOF | kubectl apply --namespace databases  -f -
 apiVersion: v1

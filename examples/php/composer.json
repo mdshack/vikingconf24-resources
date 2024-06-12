@@ -1,0 +1,20 @@
+{
+    "name": "mdshack/vikingconf-php",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Micah Shackelford",
+            "email": "micahdshackelford@gmail.com"
+        }
+    ],
+    "require": {
+        "bramus/router": "~1.6",
+        "predis/predis": "^2.2",
+        "promphp/prometheus_client_php": "^2.10"
+    }
+}
