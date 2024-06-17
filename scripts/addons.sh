@@ -21,12 +21,13 @@ helm repo add kedacore https://kedacore.github.io/charts
 helm repo update
 
 # Install Prometheus
-helm install prometheus prometheus-community/prometheus \
+helm upgrade --install prometheus prometheus-community/prometheus \
+  --set="server.global.scrape_interval=15s" \
   --namespace prometheus \
   --create-namespace
 
 # Install Keda
-helm install keda kedacore/keda \
+helm upgrade --install keda kedacore/keda \
   --namespace keda \
   --create-namespace
 

@@ -1,0 +1,38 @@
+{{- if .Values.autoscaling.enabled }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "laravel.name" . }}-http
+spec:
+  scaleTargetRef:
+    name: {{ include "laravel.name" . }}
+  pollingInterval: 5
+  minReplicaCount: {{ .Values.autoscaling.minReplicas }}
+  maxReplicaCount: {{ .Values.autoscaling.maxReplicas }}
+  fallback:
+    failureThreshold: 30
+    replicas: {{ .Values.autoscaling.fallbackReplicas }}
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: {{ include "prometheus.host" . }}
+        metricName: {{ include "laravel.name" . }}-http
+        threshold: {{ .Values.autoscaling.requestThreshold | quote }}
+        query: "sum(caddy_http_requests_in_flight{role=\"http\",service=\"{{- include "laravel.name" . -}}\"})"
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 120
+          policies:
+            - type: Percent
+              value: 100
+              periodSeconds: 120
+        scaleUp:
+          stabilizationWindowSeconds: 0
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 10
+{{- end }}
